@@ -4,32 +4,35 @@ import { useState } from "react";
 import { api } from "@/convex/_generated/api";
 
 export default function Home() {
-  const messages = useQuery(api.functions.messages.list);
-  const createMessage = useMutation(api.functions.messages.create);
+  const messages = useQuery(api.functions.message.list);
+  const createMessage = useMutation(api.functions.message.create);
+  const [input, setInput] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    createMessage({ sender: "Alice", content: input });
+    createMessage({ sender: "Eva", content: input });
     setInput("");
   };
 
-  const [input, setInput] = useState("");
   return (
-    <div>
-      {messages?.map((message, index:number) => (
-        <div key={index}>
-          <strong> {message.sender}</strong>: {message.content}
+   
+        <div>
+          {messages?.map((message, index: number) => (
+            <div key={index}>
+              <strong> {message.sender}</strong>: {message.content}
+            </div>
+          ))}
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="message"
+              id="message"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+            <button type="submit">Send</button>
+          </form>
         </div>
-      ))}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="message"
-          id="message"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-      </form>
-    </div>
+    
   );
 }
