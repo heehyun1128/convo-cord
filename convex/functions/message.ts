@@ -49,6 +49,10 @@ export const create = authenticatedMutation({
       throw new Error("You are not a member of this direct message");
     }
     await ctx.db.insert("messages", { content, directMessage,sender:ctx.user._id });
+    await ctx.scheduler.runAfter(0,internal.functions.typing.remove,{
+      directMessage,
+      user:ctx.user._id
+    })
   },
 });
 

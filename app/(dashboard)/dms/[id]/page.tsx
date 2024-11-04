@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/convex/_generated/api";
-import { Doc, Id } from "@/convex/_generated/dataModel";
+import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { FunctionReturnType } from "convex/server";
 import { MoreVerticalIcon, SendIcon, TrashIcon } from "lucide-react";
@@ -45,7 +45,25 @@ export default function MessagePage({
           <MessageItem key={message._id} msg={message} />
         ))}
       </ScrollArea>
+      <TypingIndicator directMessage={id}/>
       <MessageInput directMessage={id} />
+    </div>
+  );
+}
+
+function TypingIndicator({
+  directMessage,
+}: {
+  directMessage: Id<"directMessages">;
+}) {
+  const usernames = useQuery(api.functions.typing.list, { directMessage });
+  if (!usernames || usernames.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="text-sm text-muted-foreground px-4 py-2">
+      {usernames.join(", ")} is typing...
     </div>
   );
 }
@@ -72,10 +90,11 @@ function MessageItem({ msg }: { msg: Msg }) {
 
 function MessageActions({ msg }: { msg: Msg }) {
   const user = useQuery(api.functions.user.get);
-  const removeMutation=useMutation(api.functions.message.remove)
+  const removeMutation = useMutation(api.functions.message.remove);
   if (!user || msg.sender?._id !== user._id) {
     return null;
   }
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -83,7 +102,10 @@ function MessageActions({ msg }: { msg: Msg }) {
         <span className="sr-only">Message Actions</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem className="text-destructive" onClick={()=>removeMutation({id:msg._id})}>
+        <DropdownMenuItem
+          className="text-destructive"
+          onClick={() => removeMutation({ id: msg._id })}
+        >
           <TrashIcon />
           Delete
         </DropdownMenuItem>
@@ -98,31 +120,40 @@ function MessageInput({
   directMessage: Id<"directMessages">;
 }) {
   const [content, setContent] = useState("");
-  const sendMessage=useMutation(api.functions.message.create)
-  const handleSubmit=async(e:React.FormEvent<HTMLFormElement>)=>{
-    e.preventDefault()
-    try{
-        await sendMessage({directMessage,content})
-        setContent("")
-    }catch(err){
-        toast.error("Failed to send message",{
-            description:
-            err instanceof Error?err.message:"An unknown error occurred."
-        })
+  const sendMessage = useMutation(api.functions.message.create);
+
+  const sendTypingIndicator = useMutation(api.functions.typing.upsert);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      await sendMessage({ directMessage, content });
+      setContent("");
+    } catch (err) {
+      toast.error("Failed to send message", {
+        description:
+          err instanceof Error ? err.message : "An unknown error occurred.",
+      });
     }
-  }
+  };
+  
   return (
     <form className="flex items-center p-4 gap-2 py-2" onSubmit={handleSubmit}>
       <Input
         placeholder="Message"
         value={content}
         onChange={(e) => setContent(e.target.value)}
+        onKeyDown={() => {
+          if (content.length > 0) {
+            sendTypingIndicator({ directMessage });
+          }
+        }}
       />
-        <Button>
-          <SendIcon />
-          <span className="sr-only">Send</span>
-        </Button>
-
+      <Button>
+        <SendIcon />
+        <span className="sr-only">Send</span>
+      </Button>
     </form>
   );
 }
+
+

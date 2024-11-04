@@ -33,4 +33,12 @@ export default defineSchema({
   })
     .index("by_user1_status", ["user1", "status"])
     .index("by_user2_status", ["user2", "status"]),
+
+  typingIndicators: defineTable({
+    user: v.id("users"),
+    directMessage: v.id("directMessages"),
+    expiresAt: v.number(),
+  })
+    .index("by_dm", ["directMessage"])
+    .index("by_user_dm", ["user", "directMessage"]),
 });
