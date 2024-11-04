@@ -10,13 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-const useTestUsers = () => {
-  const user = useQuery(api.functions.user.get);
-  if (!user) {
-    return [];
-  }
-  return [];
-};
+
 
 export function PendingFriendsList() {
   const friends = useQuery(api.functions.friend.listPending)
@@ -58,6 +52,7 @@ export function AcceptedFriendsList() {
       {friends?.map((friend, index) => (
         <FriendItem key={index} username={friend.user.username} image={friend.user.image}>
           <IconButton
+          onClick={()=>{}}
             title="Start DM"
             className="bg-cyan-600"
             icon={<MessageCircleIcon />}
