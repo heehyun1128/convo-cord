@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Convo-cord Chat App
 
-## Getting Started
+## Stack
 
-First, run the development server:
+This project is developed using Convex, Nextjs, TypeScript, Shadcn and Tailwind CSS
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Overview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Add a friend
+  
+![Screenshot 2024-11-07 at 12 13 53 PM](https://github.com/user-attachments/assets/1b535bc6-f0cd-412f-a86d-686d828be668)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Accept Friend
+![Screenshot 2024-11-07 at 12 14 40 PM](https://github.com/user-attachments/assets/152761aa-177c-4ad3-88be-3c79ab69e729)
 
-## Learn More
+- Friends Page
 
-To learn more about Next.js, take a look at the following resources:
+![Screenshot 2024-11-07 at 12 09 46 PM](https://github.com/user-attachments/assets/b958a6a9-178d-49d5-bd73-c0286fe22cd3)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Chat Interface, allowing attachment
+  
+![Screenshot 2024-11-07 at 12 10 05 PM](https://github.com/user-attachments/assets/17175160-1e76-4d40-aaab-2a8e75b7bea7)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Typing Indicator
+  
+![Screenshot 2024-11-07 at 12 15 12 PM](https://github.com/user-attachments/assets/72bfca15-99a9-41fa-9405-a2150e2284af)
