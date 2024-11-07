@@ -18,7 +18,7 @@ import {
   SidebarMenuItem
 } from "@/components/ui/sidebar";
 import { api } from "@/convex/_generated/api";
-import { SignOutButton } from "@clerk/nextjs";
+import { SignOutButton} from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { User2Icon } from "lucide-react";
 import Link from "next/link";
@@ -28,6 +28,8 @@ import { usePathname } from "next/navigation";
 
 export const DashboardSidebar = () => {
   const user = useQuery(api.functions.user.get);
+ 
+
   const directMessages = useQuery(api.functions.dm.list)
   const path=usePathname()
   if (user === undefined || user === null) {
@@ -45,10 +47,10 @@ export const DashboardSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={path==="/"}>
-                  <Link href="/friends">
+                  <div>
                     <User2Icon />
-                    Friends
-                  </Link>
+                    <p className="font-bold text-md">Friends</p>
+                  </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -75,14 +77,14 @@ export const DashboardSidebar = () => {
           </SidebarGroup>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className=" bg-zinc-200 border-zinc-300">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <SidebarMenuButton className="flex items-center">
+                    <SidebarMenuButton className="flex items-center ">
                       <Avatar className="size-6">
                         <AvatarImage src={user.image} />
                         <AvatarFallback>{user.username[0]}</AvatarFallback>

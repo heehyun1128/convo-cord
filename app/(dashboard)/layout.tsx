@@ -20,6 +20,7 @@ export default function DashboardLayout({
         </SidebarProvider>
       </Authenticated>
       <Unauthenticated>
+        
         <RedirectToSignIn />
       </Unauthenticated>
     </>

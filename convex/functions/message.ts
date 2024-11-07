@@ -1,7 +1,6 @@
-import { mutation, query } from "../_generated/server";
 import { v } from "convex/values";
-import { authenticatedMutation, authenticatedQuery } from "./helper";
 import { internal } from "../_generated/api";
+import { authenticatedMutation, authenticatedQuery } from "./helper";
 
 export const list = authenticatedQuery({
   args: {

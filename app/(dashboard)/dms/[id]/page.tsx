@@ -40,14 +40,14 @@ export default function MessagePage({
   }
   return (
     <div className="flex flex-1 flex-col divide-y max-h-screen">
-      <header className="flex items-center gap-2 p-4">
+      <header className="flex items-center gap-2 p-4 border-b-2 border-zinc-200 mb-4">
         <Avatar className="size-8 border">
           <AvatarImage src={directMessage.user.image} />
           <AvatarFallback />
         </Avatar>
         <h1 className="font-semibold">{directMessage.user.username}</h1>
       </header>
-      <ScrollArea className="h-full">
+      <ScrollArea className="h-full border-none">
         {messages?.map((message) => (
           <MessageItem key={message._id} msg={message} />
         ))}
@@ -79,16 +79,19 @@ type Msg = FunctionReturnType<typeof api.functions.message.list>[number];
 
 function MessageItem({ msg }: { msg: Msg }) {
   return (
-    <div className="flex items-center px-4 gap-2">
-      <Avatar className="size-8 border">
-        {msg.sender && <AvatarImage src={msg.sender?.image} />}
-        <AvatarFallback />
-      </Avatar>
+    <div className="flex items-center p-4 gap-2 hover:bg-zinc-100 group border-b-zinc-200 border-b border-dotted">
       <div className="flex flex-col mr-auto">
-        <p className="text-xs text-muted-foreground">
-          {msg.sender?.username ?? "Deleted User"}
-        </p>
-        <p className="text-sm ">{msg.content}</p>
+        <div className="flex items-center">
+          <Avatar className="size-8 border">
+            {msg.sender && <AvatarImage src={msg.sender?.image} />}
+            <AvatarFallback />
+          </Avatar>
+          <p className="text-md font-semibold ml-2">
+            {msg.sender?.username ?? "Deleted User"}
+          </p>
+        </div>
+       <div className="pl-10">
+       <p className="text-sm ">{msg.content}</p>
         {msg.attachment && (
           <Image
             alt="attachment"
@@ -98,6 +101,7 @@ function MessageItem({ msg }: { msg: Msg }) {
             className="rounded border overflow-hidden"
           />
         )}
+       </div>
       </div>
       <MessageActions msg={msg} />
     </div>
@@ -114,7 +118,7 @@ function MessageActions({ msg }: { msg: Msg }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <MoreVerticalIcon className="size-4 text-muted-foreground" />
+        <MoreVerticalIcon className="size-4 text-muted-foreground hidden group-hover:block" />
         <span className="sr-only">Message Actions</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -152,7 +156,7 @@ function MessageInput({
       await sendMessage({ directMessage, attachment, content });
       setContent("");
       setAttachment(undefined);
-      setFile(undefined)
+      setFile(undefined);
     } catch (err) {
       toast.error("Failed to send message", {
         description:
@@ -164,8 +168,8 @@ function MessageInput({
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setFile(file)
-    setIsUploading(true)
+    setFile(file);
+    setIsUploading(true);
     const url = await generateUploadUrl();
     const res = await fetch(url, {
       method: "POST",
@@ -173,12 +177,15 @@ function MessageInput({
     });
     const { storageId } = (await res.json()) as { storageId: Id<"_storage"> };
     setAttachment(storageId);
-    setIsUploading(false)
+    setIsUploading(false);
   };
 
   return (
     <>
-      <form className="flex items-end p-4 gap-2 py-2" onSubmit={handleSubmit}>
+      <form
+        className="flex items-end p-4 gap-2 py-4 mt-2"
+        onSubmit={handleSubmit}
+      >
         <Button
           type="button"
           size="icon"
@@ -188,12 +195,7 @@ function MessageInput({
           <span className="sr-only">Attach</span>
         </Button>
         <div className="flex flex-col flex-1 gap-2">
-          {file && (
-            <ImagePreview
-              file={file}
-              isUploading={isUploading}
-            />
-          )}
+          {file && <ImagePreview file={file} isUploading={isUploading} />}
           <Input
             placeholder="Message"
             value={content}
@@ -234,7 +236,6 @@ function ImagePreview({
         width={300}
         height={300}
         alt="attachment"
-  
       />
       {isUploading && (
         <div className="absolute inset-0 flex items-center justify-center bg-background/50">
